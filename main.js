@@ -37,8 +37,9 @@
 	function setupRenderer() {
 		canvas = document.getElementById('canvas');
 		scene = new THREE.Scene();
-		scene.background = new THREE.Color( 0x191930 );
-		camera = new THREE.PerspectiveCamera(75, canvas.width / canvas.height, 0.1, 1000);
+		//scene.background = new THREE.Color( 0xb0b0b0 );
+		scene.background = new THREE.Color( 0x222230 );
+		camera = new THREE.PerspectiveCamera(37, canvas.width / canvas.height, 0.1, 1000);
 
 		renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: false});
 		//renderer.setPixelRatio(2);
@@ -46,56 +47,50 @@
 		//renderer.shadowMap.enabled = true;
 		//renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
-		camera.position.z = 270;
-		camera.position.y = -5;
+		camera.position.z = 200;
+		camera.position.y = 100;
 		//camera.position.x = 0;
+		camera.rotation.x = -0.4;
 
 		var ambientLight = new THREE.AmbientLight( 0x606060 );
 		scene.add( ambientLight );
 
 		// Global light
-		var light = new THREE.PointLight( 0xccaa88, 4.5, 1000, 2 );
+		var light = new THREE.PointLight( 0x9999cc, 4.5, 1000, 2 );
 		light.position.set( 200, 400, 300 );
 		scene.add( light );
-
-
-		/*
-		// Sign light
-		var light = new THREE.PointLight( 0xffaa66, 6, 60, 2);
-		light.position.set( -70, 80, 70 );
-		scene.add( light );
-		*/
 	}
 
 	function addShapes() {
 		// Cube test
 		for(let x = -3; x < 3; x++) {
-			for(let y = 0; y < 4; y++) {
-				let name = 'lower-empty';
+			for(let y = 0; y < 3; y++) {
+				let name = 'lower-empty-color';
 				let rand = Math.random();
 
 				if( rand > 0.3333 ) {
-					name = 'door-frame';
+					name = 'door-frame-x-color';
 
 					if( rand > 0.6666 ) {
-						name = 'door-large';
+						name = 'door-large-color';
 					}
 				}
 
 				if( y > 0 ) {
-					name = 'upper-wall';
+					name = 'upper-wall-color';
 				}
 				var texture = new THREE.TextureLoader().load(name + '.png');
 				texture.minFilter = THREE.NearestFilter;
 				texture.magFilter = THREE.NearestFilter;
-				var geometry = new THREE.BoxGeometry(128, 128, 128);
-				var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+				var geometry = new THREE.BoxGeometry(32, 32, 32);
+				var material = new THREE.MeshPhongMaterial({map: texture, overdraw: 0.5});
+				//var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
 				cube = new THREE.Mesh(geometry, material);
 
-				cube.position.x = x * 128;
-				cube.position.y = y * 128;
+				cube.position.x = x * 32;
+				cube.position.y = y * 32;
 				if( x == 2 || x == -1 ) {
-					cube.position.z = -10;
+					cube.position.z = -7;
 				}
 				scene.add(cube);
 				cubes.push(cube);
@@ -103,72 +98,34 @@
 		}
 
 		// Plane test
-		//var planeTexture = new THREE.TextureLoader().load('1084.png');
-		//planeTexture.minFilter = THREE.NearestFilter;
-		//planeTexture.magFilter = THREE.NearestFilter;
-		var geometry = new THREE.PlaneGeometry(900, 1200);
-		var material = new THREE.MeshLambertMaterial({color: 0x404050, side: THREE.DoubleSide, overdraw: 0.5}); //map: planeTexture
+		var texture = new THREE.TextureLoader().load('ground-color.png');
+		texture.minFilter = THREE.NearestFilter;
+		texture.magFilter = THREE.NearestFilter;
+		texture.wrapS = THREE.RepeatWrapping;
+		texture.wrapT = THREE.RepeatWrapping;
+		texture.repeat.set(32, 32);
+		var geometry = new THREE.PlaneGeometry(896, 1200);
+		var material = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide, overdraw: 0.5}); //map: planeTexture
 		var plane = new THREE.Mesh(geometry, material);
 		scene.add(plane);
-		plane.position.y = -64 - 5;
+		plane.position.x = -16;
+		plane.position.y = -16;
 		plane.position.z = 150;
 		plane.rotation.x = Math.PI/2;
 
-		// Sidewalk 1
-		var geometry = new THREE.PlaneGeometry(900, 150);
-		var material = new THREE.MeshLambertMaterial({color: 0x707075, side: THREE.DoubleSide, overdraw: 0.5}); //map: planeTexture
-		var plane = new THREE.Mesh(geometry, material);
-		scene.add(plane);
-		plane.position.y = -64;
-		plane.position.z = 100;
-		plane.rotation.x = Math.PI/2;
-
-		// Sidewalk 1 vertical
-		var geometry = new THREE.PlaneGeometry(900, 6);
-		var material = new THREE.MeshLambertMaterial({color: 0x707075, side: THREE.DoubleSide, overdraw: 0.5}); //map: planeTexture
-		var plane = new THREE.Mesh(geometry, material);
-		scene.add(plane);
-		plane.position.y = -67;
-		plane.position.z = 175;
-
-		// Sidewalk 2
-		var geometry = new THREE.PlaneGeometry(900, 150);
-		var material = new THREE.MeshLambertMaterial({color: 0x707075, side: THREE.DoubleSide, overdraw: 0.5}); //map: planeTexture
-		var plane = new THREE.Mesh(geometry, material);
-		scene.add(plane);
-		plane.position.y = -64;
-		plane.position.z = 500;
-		plane.rotation.x = Math.PI/2;
-
-		// Sidewalk 2 vertical
-		var geometry = new THREE.PlaneGeometry(900, 6);
-		var material = new THREE.MeshLambertMaterial({color: 0x707075, side: THREE.DoubleSide, overdraw: 0.5}); //map: planeTexture
-		var plane = new THREE.Mesh(geometry, material);
-		scene.add(plane);
-		plane.position.y = -67;
-		plane.position.z = 425;
-
-		// Opposite building
-		var geometry = new THREE.PlaneGeometry(900, 450);
-		var material = new THREE.MeshLambertMaterial({color: 0x556677, side: THREE.DoubleSide, overdraw: 0.5}); //map: planeTexture
-		var plane = new THREE.Mesh(geometry, material);
-		scene.add(plane);
-		plane.position.y = 67;
-		plane.position.z = 565;
 
 		// Sprite test
-		var spriteMap = new THREE.TextureLoader().load('test-sprite-2.png');
+		var spriteMap = new THREE.TextureLoader().load('sprite-item-color.png');
 		spriteMap.minFilter = THREE.NearestFilter;
 		spriteMap.magFilter = THREE.NearestFilter;
-		spriteMap.repeat.x = 0.5;
-		spriteMap.offset.x = 0.5;
-		//spriteMap.offset.y = 0.3;
+		//spriteMap.repeat.x = 0;
+		//spriteMap.offset.x = 0;
 		var spriteMaterial = new THREE.SpriteMaterial({map: spriteMap, lights: true});
 		var sprite = new THREE.Sprite(spriteMaterial);
-		sprite.scale.set(32, 16, 1);
-		sprite.position.x = -40;
-		sprite.position.y = -40;
-		sprite.position.z = 170;
+		sprite.scale.set(16, 16, 1);
+		sprite.position.x = 0;
+		sprite.position.y = -8;
+		sprite.position.z = 60;
 		scene.add(sprite);
 	}
 
