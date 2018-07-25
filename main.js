@@ -12,7 +12,7 @@
 
 		window.addEventListener('keypress', function(e) {
 			const ANGLE_INCREMENT = 0.075;
-			const POSITION_INCREMENT = 4;
+			const POSITION_INCREMENT = 8;
 
 			switch(e.key) {
 				case 'ArrowUp':
@@ -47,8 +47,8 @@
 		//renderer.shadowMap.enabled = true;
 		//renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
-		camera.position.z = 200;
-		camera.position.y = 100;
+		camera.position.z = 400;
+		camera.position.y = 200;
 		//camera.position.x = 0;
 		camera.rotation.x = -0.4;
 
@@ -62,35 +62,40 @@
 	}
 
 	function addShapes() {
+		const CUBE_SIZE = 64;
 		// Cube test
 		for(let x = -3; x < 3; x++) {
 			for(let y = 0; y < 3; y++) {
-				let name = 'lower-empty-color';
+				let name = 'lower-empty-color-72test';
 				let rand = Math.random();
 
-				if( rand > 0.3333 ) {
-					name = 'door-frame-x-color';
+				if( rand > 0.25 ) {
+					name = 'lower-empty-color-72test-3';//'door-frame-x-color';
 
-					if( rand > 0.6666 ) {
-						name = 'door-large-color';
+					if( rand > 0.5 ) {
+						name = 'lower-empty-color-72test-2';
+
+						if( rand > 0.75 ) {
+							name = 'door-frame-x-color';
+						}
 					}
 				}
 
 				if( y > 0 ) {
-					name = 'upper-wall-color';
+					name = Math.random() > 0.5 ? 'upper-wall-color' : 'upper-wall-color-2';
 				}
 				var texture = new THREE.TextureLoader().load(name + '.png');
 				texture.minFilter = THREE.NearestFilter;
 				texture.magFilter = THREE.NearestFilter;
-				var geometry = new THREE.BoxGeometry(32, 32, 32);
-				var material = new THREE.MeshPhongMaterial({map: texture, overdraw: 0.5});
-				//var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
+				var geometry = new THREE.BoxGeometry(CUBE_SIZE, CUBE_SIZE, CUBE_SIZE);
+				//var material = new THREE.MeshPhongMaterial({map: texture, overdraw: 0.5});
+				var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
 				cube = new THREE.Mesh(geometry, material);
 
-				cube.position.x = x * 32;
-				cube.position.y = y * 32;
+				cube.position.x = x * CUBE_SIZE;
+				cube.position.y = y * CUBE_SIZE;
 				if( x == 2 || x == -1 ) {
-					cube.position.z = -7;
+					cube.position.z = -10;
 				}
 				scene.add(cube);
 				cubes.push(cube);
@@ -108,8 +113,8 @@
 		var material = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide, overdraw: 0.5}); //map: planeTexture
 		var plane = new THREE.Mesh(geometry, material);
 		scene.add(plane);
-		plane.position.x = -16;
-		plane.position.y = -16;
+		plane.position.x = -32;
+		plane.position.y = -32;
 		plane.position.z = 150;
 		plane.rotation.x = Math.PI/2;
 
@@ -123,7 +128,7 @@
 		var spriteMaterial = new THREE.SpriteMaterial({map: spriteMap, lights: true});
 		var sprite = new THREE.Sprite(spriteMaterial);
 		sprite.scale.set(16, 16, 1);
-		sprite.position.x = 0;
+		sprite.position.x = 180;
 		sprite.position.y = -8;
 		sprite.position.z = 60;
 		scene.add(sprite);
