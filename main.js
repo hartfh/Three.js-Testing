@@ -118,6 +118,19 @@
 		plane.position.z = 150;
 		plane.rotation.x = Math.PI/2;
 
+		// Plane character test
+		var texture2 = new THREE.TextureLoader().load('character-test.png');
+		texture2.minFilter = THREE.NearestFilter;
+		texture2.magFilter = THREE.NearestFilter;
+		texture2.wrapS = THREE.RepeatWrapping;
+		texture2.wrapT = THREE.RepeatWrapping;
+		//var geometry = new THREE.PlaneGeometry(42, 27);
+		var geometry = new THREE.PlaneGeometry(64, 64);
+		var material = new THREE.MeshBasicMaterial({map: texture2, side: THREE.DoubleSide, overdraw: 0.5, transparent: true});
+		var plane = new THREE.Mesh(geometry, material);
+		scene.add(plane);
+		plane.position.z = 90;
+
 
 		// Sprite test
 		var spriteMap = new THREE.TextureLoader().load('sprite-item-color.png');
